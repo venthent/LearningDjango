@@ -4,15 +4,23 @@
     <meta charset="UTF-8">
     <title></title>
 </head>
-<body>
+
 <h1>
     {{ question.question_text }}
 </h1>
-<ul>
+{% if error_message %}
+    <p><strong>{{ error_message }}</strong></p>
+{% endif %}
+<form method="post" action="{% url 'polls:vote' question.id %}">
+    {% csrf_token %}
     {% for choice in question.choice_set.all %}
-        <li>{{ choice.choice_text }}</li>
+        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+        <!--forloop.counter 指示 for 标签已经循环多少次-->
+        <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
     {% endfor %}
-</ul>
-{{ question }}
+<input type="submit" value="Vote">
+</form>
+
+
 </body>
 </html>
