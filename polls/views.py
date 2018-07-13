@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
-from django.template import loader
+from django.utils import timezone
 from .models import Question, Choice
 
 
@@ -12,14 +12,19 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         """Return the last five published questions."""
-        return Question.objects.order_by('-pub_date')[:5]
+        return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
 
 
 class DetailView(generic.DetailView):
-
     #每个通用视图需要知道它将作用于哪个模型,这由 model 属性提供
     model = Question
     template_name = 'polls/detail.html'
+
+    def get_queryset(self):
+        '''Excludes any questions that aren't published yet.
+        '''
+        return Question.objects.filter(pub_date__lte=timezone.now())
+
 
 
 class ResultView(generic.DetailView):
