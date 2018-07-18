@@ -5,6 +5,9 @@
     <title></title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <!-- 模板标签会生成静态文件的绝对路径-->
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
 </head>
 <body>
 {% if latest_question_list %}
